@@ -4,7 +4,7 @@
 #include <errno.h>
 #include <stdio.h>
 
-extern char **environ;
+extern char **environ; // 전역변수 취급 하는가? 
 
 int	main(int argc, char *argv[])
 {
