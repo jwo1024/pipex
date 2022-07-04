@@ -6,11 +6,12 @@
 /*   By: jiwolee <jiwolee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/04 17:25:09 by jiwolee           #+#    #+#             */
-/*   Updated: 2022/07/04 19:31:53 by jiwolee          ###   ########seoul.kr  */
+/*   Updated: 2022/07/04 19:59:41 by jiwolee          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include	"pipex.h"
+
 #include	<stdio.h>
 #include	<unistd.h> // execve
 #include	<stdlib.h>
@@ -25,7 +26,7 @@ int	main(int argc, char *argv[], char *envp[])
 	{
 		set_info_pipex(&info, argc, argv, envp);
 		if (set_info_which(&info.which) == NULL)
-			; //	error(NULL, -1);
+			error("ERROR : set_info_which() ", -1);
 		rtn = pipex(&info);
 		clear_info_which(&info.which);
 	}
@@ -40,13 +41,13 @@ int	pipex(t_info_pipex *info)
 	int	i;
 
 	if (pipe(info->fd.pipe) == -1)
-		return (error("Error : pipex() fail pipe ", -1));
+		return (error("Error : pipex() fail pipe ", 1));
 	i = 0;
 	while (i < 2)
 	{
 		info->pid[i] = fork();
 		if (info->pid[i] == -1)
-			perror("Error : pipex() fail fork ");
+			error("Error : pipex() fail fork ", -1);
 		else if (info->pid[i] == 0)
 			exit(pipex_child_process(info, i));
 		i++;
@@ -88,7 +89,7 @@ int	set_fd_dup(t_info_pipex *info, int cnt)
 	{
 		to_stdin = open(info->argv[1], O_RDONLY);
 		to_stdout = info->fd.pipe[1];
-		rtn_close = close(info->fd.pipe[0]); // close 실패도 처리 해주어야 할텐데 이렇게 하면 errno에 기록이 안될텐디..
+		rtn_close = close(info->fd.pipe[0]);
 	}
 	else if (cnt == info->argc - 4)
 	{
@@ -98,7 +99,7 @@ int	set_fd_dup(t_info_pipex *info, int cnt)
 		rtn_close = close(info->fd.pipe[1]);
 	}
 	else
-		return (error("ERROR : set_fd_dup() wrong cnt ", -1));
+		return (error("ERROR : set_fd_dup() wrong cnt ", 1));
 	if (to_stdin != -1 && to_stdout != -1 && rtn_close != -1 \
 		&& dup2(to_stdin, 0) != -1 && dup2(to_stdout, 1) != -1)
 		return (0);
