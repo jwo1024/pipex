@@ -6,7 +6,7 @@
 /*   By: jiwolee <jiwolee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/04 17:25:09 by jiwolee           #+#    #+#             */
-/*   Updated: 2022/07/04 21:04:48 by jiwolee          ###   ########seoul.kr  */
+/*   Updated: 2022/07/04 21:46:07 by jiwolee          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int	pipex(t_info_pipex *info)
 	waitpid(info->pid[1], &info->status[1], 0);
 	if (info->status[0] == 0 && info->status[1] == 0)
 		return (0);
-	return (WEXITSTATUS(info->status[1]));
+	return (wait_exit_status(info->status[1]));
 }
 
 int	pipex_child_process(t_info_pipex *info, int cnt)

@@ -6,7 +6,7 @@
 /*   By: jiwolee <jiwolee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/04 17:25:35 by jiwolee           #+#    #+#             */
-/*   Updated: 2022/07/04 19:36:19 by jiwolee          ###   ########seoul.kr  */
+/*   Updated: 2022/07/04 21:51:20 by jiwolee          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ char	*which_cmd_parent(int pid, t_info_which *which)
 	cmd_path = NULL;
 	close(which->pipe_fd[1]);
 	waitpid(pid, &status, 0);
-	if (WEXITSTATUS(status) == 0)
+	if (wait_exit_status(status) == 0)
 	{
 		cmd_path = get_next_line(which->pipe_fd[0]);
 		remove_linefeed(&cmd_path);

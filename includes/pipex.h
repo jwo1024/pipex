@@ -6,7 +6,7 @@
 /*   By: jiwolee <jiwolee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/04 19:45:58 by jiwolee           #+#    #+#             */
-/*   Updated: 2022/07/04 20:17:24 by jiwolee          ###   ########seoul.kr  */
+/*   Updated: 2022/07/04 21:45:47 by jiwolee          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,5 +60,6 @@ int				error(char	*message, int exit_num);
 void			set_info_pipex(t_info_pipex *info, \
 							int argc, char *argv[], char *envp[]);
 void			remove_linefeed(char **str);
+int				wait_exit_status(int status);
 
 #endif
