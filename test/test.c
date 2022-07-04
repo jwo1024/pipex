@@ -4,7 +4,7 @@
 #include <errno.h>
 #include <stdio.h>
 
-extern char **environ; // 전역변수 취급 하는가? 
+extern char **environ; // 전역변수 취급 하는가? posix에서는 쓰라고 되어 잇음
 
 int	main(int argc, char *argv[])
 {

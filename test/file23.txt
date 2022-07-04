@@ -1,0 +1,10 @@
+a.out
+file13.txt
+file23.txt
+pipex
+pipex2
+test.c
+test.txt
+test2.c
+test2.txt
+test3.c

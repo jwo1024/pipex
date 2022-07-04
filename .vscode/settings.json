@@ -1,0 +1,12 @@
+{
+	"files.associations": {
+		"__config": "cpp",
+		"get_next_line.h": "c",
+		"pipex.h": "c",
+		"stdio.h": "c",
+		"stdlib.h": "c",
+		"fcntl.h": "c",
+		"libft_pipex.h": "c",
+		"unistd.h": "c"
+	}
+}
