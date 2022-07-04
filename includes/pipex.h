@@ -6,7 +6,7 @@
 /*   By: jiwolee <jiwolee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/04 19:45:58 by jiwolee           #+#    #+#             */
-/*   Updated: 2022/07/04 19:49:01 by jiwolee          ###   ########seoul.kr  */
+/*   Updated: 2022/07/04 20:17:24 by jiwolee          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,12 @@
 
 # include	"./libft_pipex.h"
 # include	"./get_next_line.h"
-# include	<stdio.h>
-# include	<unistd.h>
-# include	<stdlib.h>
+# include	<stdio.h> // perror
+# include	<unistd.h> // access dup dup2 execve fork unlink
+# include	<stdlib.h> // exit pipe
 # include	<fcntl.h>
+# include	<string.h> //strerror
+// # include	<sys/wait.h>
 
 typedef struct s_info_fd
 {
