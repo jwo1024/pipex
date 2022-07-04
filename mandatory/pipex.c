@@ -6,7 +6,7 @@
 /*   By: jiwolee <jiwolee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/04 17:25:09 by jiwolee           #+#    #+#             */
-/*   Updated: 2022/07/04 19:14:33 by jiwolee          ###   ########seoul.kr  */
+/*   Updated: 2022/07/04 19:20:35 by jiwolee          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include	<unistd.h> // execve
 #include	<stdlib.h>
 #include	<fcntl.h>
-// In
+
 int	main(int argc, char *argv[], char *envp[])
 {
 	t_info_pipex	info;
@@ -23,10 +23,6 @@ int	main(int argc, char *argv[], char *envp[])
 
 	if (argc == 5)
 	{
-		if (is_valid_files(argv[1], argv[argc - 1]) == -1) //이거를 open 할때 검사해야 했던것 같은디.? 
-		{
-			rtn = error("ERROR : Invalid file ", -1);
-		}
 		set_info_pipex(&info, argc, argv, envp);
 		if (set_info_which(&info.which) == NULL)
 			; //	error(NULL, -1);
