@@ -6,7 +6,7 @@
 /*   By: jiwolee <jiwolee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/04 17:25:09 by jiwolee           #+#    #+#             */
-/*   Updated: 2022/07/04 19:59:41 by jiwolee          ###   ########seoul.kr  */
+/*   Updated: 2022/07/04 21:04:48 by jiwolee          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ int	main(int argc, char *argv[], char *envp[])
 	}
 	else
 		rtn = error("ERROR : Wrong number of argv ", 1);
-//	system("leaks a.out");
 	return (rtn);
 }
 
