@@ -1,58 +1,43 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipex.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jiwolee <jiwolee@student.42seoul.kr>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/04 17:25:09 by jiwolee           #+#    #+#             */
+/*   Updated: 2022/07/04 18:57:15 by jiwolee          ###   ########seoul.kr  */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include	"pipex.h"
-
 #include	<stdio.h>
 #include	<unistd.h> // execve
 #include	<stdlib.h>
 #include	<fcntl.h>
-
-// ../pipex
-
-// fork malloc free
-
-
-// cmd가 입력 되었을 때 
-// cmd 수가 적을때
-// cmd 
-// file1 이 없는 파일, 혹은 권한이 없는 파일
-// 없는 cmd일 때
-// 
-
-
-// 에러 함수를 이용한 에러처리는 최대한 최상위 함수에서
-// error() 함수 처리 /// 아니 errno 처리는
-// 제외하는 곳은 자식 프로세스에서의 에러 함수..
-
 
 int	main(int argc, char *argv[], char *envp[])
 {
 	t_info_pipex	info;
 	int				rtn;
 
-	if (argc == 5) // bonus 안할꺼면 argc == 5
+	if (argc == 5)
 	{
-		if (is_valid_files(argv[1], argv[argc - 1]) == -1)
+		if (is_valid_files(argv[1], argv[argc - 1]) == -1) //이거를 open 할때 검사해야 했던것 같은디.? 
 		{
-			rtn = error("Invalid file", -1);
+			rtn = error("ERROR : Invalid file ", -1);
 		}
 		set_info_pipex(&info, argc, argv, envp);
 		if (set_info_which(&info.which) == NULL)
-			;
-		//	error(NULL, -1);
+			; //	error(NULL, -1);
 		rtn = pipex(&info);
-
-//		printf("parent finsih\n");
 		clear_info_which(&info.which);
 	}
 	else
-	{
-		rtn = error("Too few argv", 1); // errno 에 해당하는 출력이 아니면 일반 에러를 출력해야 한다. 
-	}
+		rtn = error("ERROR : Wrong number of argv ", 1);
+	return(rtn);
 //	sleep(30);
 //	system("leaks a.out");
-	if (rtn != 0)
-		return (1);
-	return (0);
 }
 
 
@@ -71,49 +56,34 @@ int	pipex(t_info_pipex *info)
 			perror("Error : pipex() fail fork ");
 			break;
 		}
-		else if (info->pid[i] == 0) // 자식프로세스
-		{
-			i = cmd_child_process(info, i);
-			exit(i); // ? 
-		}
+		else if (info->pid[i] == 0)
+			exit(pipex_child_process(info, i));
 		i++;
 	}
 	close(info->fd.pipe[0]);
 	close(info->fd.pipe[1]);
-	waitpid(info->pid[0], &info->status[i], 0);
-	waitpid(info->pid[1], &info->status[i], 0); // 이것도 에러 처리 해야하나?
-	fprintf(stderr, "status %d %d \n", WEXITSTATUS(info->status[0]),  WEXITSTATUS(info->status[1]));
-
+	waitpid(info->pid[0], &info->status[0], 0);
+	waitpid(info->pid[1], &info->status[1], 0);
 	if (info->status[0] == 0 && info->status[1] == 0)
 		return (0);
-
-	fprintf(stderr, "status %d\n", info->status[1]);
-	return (1);
-
-	exit(info->status[1]);
+	return (WEXITSTATUS(info->status[1]));
 }
 
-
-int		cmd_child_process(t_info_pipex *info, int cnt) // child proccess
+int		pipex_child_process(t_info_pipex *info, int cnt)
 {
 	char	**cmd_splited;
 	char	*cmd_path;
 
+	if (set_fd_dup(info, cnt) == 1)
+		return (1);
 	cmd_splited = ft_split(info->argv[cnt + 2], ' ');
 	if (cmd_splited == NULL)
-		return(error("ERROR : fail split ", 1)); // exit 로 설정해야하나?????
-	cmd_path = which_cmd(cmd_splited[0], info->envp, &(info->which)); // 요 경우만 따로 처리해주어야 하나? undifined behaior 이니까 .
-	if (cmd_path == NULL) // 여기서 중단시키는 것이 맞나? ? 
-	{
-		error("ERROR : cmd not found ", 127);
-		exit(127);
-		error("WORNG WORKING", -1);
-		//return (error("ERROR : cmd not found ", -1)); // return error ; // 그래도 outfile을 새로 만들긴 해야한다. 
-	}
-	if (set_fd_dup(info, cnt) == 1) // 안에서 에러 메세지 띄움 /////// 
-		return (1); // 여기도 return으로 바꿔야 할까 nono.... /??????////// // exit(1); 갈겨야 하지 않을까...
+		return(error("ERROR : fail cmd split ", 1));
+	cmd_path = which_cmd(cmd_splited[0], info->envp, &(info->which));
+	if (cmd_path == NULL)
+		return(error("ERROR : cmd path not found ", 127));
 	execve(cmd_path, cmd_splited, info->envp);
-	perror("ERROR : cmd_child_process() ");
+	perror("ERROR : pipex_child_process() ");
 	exit(EXIT_FAILURE);
 }
 
@@ -121,7 +91,7 @@ int		set_fd_dup(t_info_pipex *info, int cnt)
 {
 	int	to_stdin;
 	int	to_stdout;
-	int	rtn_close; // ..
+	int	rtn_close;
 
 	if (cnt == 0)
 	{
@@ -136,9 +106,9 @@ int		set_fd_dup(t_info_pipex *info, int cnt)
 		rtn_close = close(info->fd.pipe[1]);
 	}
 	else
-		return (error("ERROR : set_fd_dup()", -1));
+		return (error("ERROR : set_fd_dup() wrong cnt ", -1));
 	if (to_stdin != -1 && to_stdout != -1 && rtn_close != -1 \
 		&& dup2(to_stdin, 0) != -1 && dup2(to_stdout, 1) != -1)
 		return (0);
-	return (error("ERROR : set_fd_dup()", 1));
+	return (error("ERROR : set_fd_dup() ", 1));
 }

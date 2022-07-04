@@ -38,8 +38,8 @@ typedef struct s_info_pipex
 
 /* main */
 int				pipex(t_info_pipex *info);
-int				cmd_child_process(t_info_pipex *info, int cnt); // main
-int				set_fd_dup(t_info_pipex *info, int cnt); //main
+int				pipex_child_process(t_info_pipex *info, int cnt); // main
+int				set_fd_dup(t_info_pipex *info, int cnt);
 
 
 /*which _ utils*/
@@ -47,6 +47,7 @@ char			*which_cmd(char *cmd, char *envp[], t_info_which *which); // pipex main
 t_info_which	*set_info_which(t_info_which *info);
 void			clear_info_which(t_info_which *info);
 void			remove_linefeed(char **str);
+void			which_cmd_child(t_info_which *which, char *envp[]);
 
 /*utils */
 int				is_valid_files(char *file1, char *file2);

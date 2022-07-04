@@ -2,6 +2,7 @@
 #include	<fcntl.h>
 #include	<unistd.h>
 #include	<sys/wait.h>
+#include	<stdlib.h>
 
 
 int	p1(int pipe_fd[2], char **envp)
@@ -28,6 +29,7 @@ int	p2(int pipe_fd[2], char **envp)
 	char cmd[] = "cat";
 	char	buf[100];
 
+	exit(127);
 	argv[0] = cmd;
 	argv[1] = NULL;
 	close(pipe_fd[1]);
@@ -51,7 +53,8 @@ int	main(int argc, char *argv[], char *envp[])
 	int	pipey_fd[2];
 	int	pid1;
 	int	pid2;
-	int	status;
+	int	status1;
+	int	status2;
 	char	buf[100];
 
 
@@ -75,8 +78,9 @@ int	main(int argc, char *argv[], char *envp[])
 	close(pipe_fd[0][1]);
 	close(pipe_fd[0][0]);
 
-	waitpid(pid1, &status, 0);
-	waitpid(pid2, &status, 0);
-
+	waitpid(pid1, &status1, 0);
+	waitpid(pid2, &status2, 0);
+	printf("mecro %d\n", WEXITSTATUS(status2));
+	printf("status pid1 %d pid2 %d\n", status1, status2);
 	return (0);
 }
