@@ -6,7 +6,7 @@
 /*   By: jiwolee <jiwolee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/04 17:25:35 by jiwolee           #+#    #+#             */
-/*   Updated: 2022/07/04 18:58:57 by jiwolee          ###   ########seoul.kr  */
+/*   Updated: 2022/07/04 19:13:52 by jiwolee          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ char	*which_cmd(char *cmd, char *envp[], t_info_which *which)
 	if (cmd == NULL)
 		return (NULL);
 	which->which_cmd[1] = cmd;
+	cmd_path = NULL;
 	pid = fork();
 	if (pid == -1)
 		return (NULL);
@@ -32,7 +33,7 @@ char	*which_cmd(char *cmd, char *envp[], t_info_which *which)
 	{
 		close(which->pipe_fd[1]);
 		waitpid(pid, &status, 0);
-		if (WIFEXITED(status))
+		if (WEXITSTATUS(status) == 0)
 		{
 			cmd_path = get_next_line(which->pipe_fd[0]);
 			remove_linefeed(&cmd_path); // gnl 에 합치기 
@@ -49,7 +50,7 @@ void	which_cmd_child(t_info_which *which, char *envp[])
 	close(which->pipe_fd[0]);
 	dup2(which->pipe_fd[1], 1);
 	execve("/usr/bin/which", which->which_cmd, envp);
-	exit(EXIT_FAILURE);
+	exit(EXIT_FAILURE); // 여기서 뻑나는 건가?
 }
 
 int	which_cmd_parent()
@@ -58,7 +59,7 @@ int	which_cmd_parent()
 }
 
 
-t_info_which	*set_info_which(t_info_which	*info)
+t_info_which	*set_info_which(t_info_which *info)
 {
 	info->which_cmd[0] = ft_strdup("which");
 	if (info->which_cmd[0] == NULL)

@@ -6,7 +6,7 @@
 /*   By: jiwolee <jiwolee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/04 17:25:09 by jiwolee           #+#    #+#             */
-/*   Updated: 2022/07/04 18:57:15 by jiwolee          ###   ########seoul.kr  */
+/*   Updated: 2022/07/04 19:14:33 by jiwolee          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include	<unistd.h> // execve
 #include	<stdlib.h>
 #include	<fcntl.h>
-
+// In
 int	main(int argc, char *argv[], char *envp[])
 {
 	t_info_pipex	info;
