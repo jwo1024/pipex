@@ -6,7 +6,7 @@
 /*   By: jiwolee <jiwolee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/04 17:25:09 by jiwolee           #+#    #+#             */
-/*   Updated: 2022/07/04 19:20:35 by jiwolee          ###   ########seoul.kr  */
+/*   Updated: 2022/07/04 19:31:53 by jiwolee          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,9 @@ int	main(int argc, char *argv[], char *envp[])
 	}
 	else
 		rtn = error("ERROR : Wrong number of argv ", 1);
-	return(rtn);
-//	sleep(30);
 //	system("leaks a.out");
+	return (rtn);
 }
-
 
 int	pipex(t_info_pipex *info)
 {
@@ -48,10 +46,7 @@ int	pipex(t_info_pipex *info)
 	{
 		info->pid[i] = fork();
 		if (info->pid[i] == -1)
-		{
 			perror("Error : pipex() fail fork ");
-			break;
-		}
 		else if (info->pid[i] == 0)
 			exit(pipex_child_process(info, i));
 		i++;
@@ -65,7 +60,7 @@ int	pipex(t_info_pipex *info)
 	return (WEXITSTATUS(info->status[1]));
 }
 
-int		pipex_child_process(t_info_pipex *info, int cnt)
+int	pipex_child_process(t_info_pipex *info, int cnt)
 {
 	char	**cmd_splited;
 	char	*cmd_path;
@@ -74,16 +69,16 @@ int		pipex_child_process(t_info_pipex *info, int cnt)
 		return (1);
 	cmd_splited = ft_split(info->argv[cnt + 2], ' ');
 	if (cmd_splited == NULL)
-		return(error("ERROR : fail cmd split ", 1));
+		return (error("ERROR : fail cmd split ", 1));
 	cmd_path = which_cmd(cmd_splited[0], info->envp, &(info->which));
 	if (cmd_path == NULL)
-		return(error("ERROR : cmd path not found ", 127));
+		return (error("ERROR : cmd path not found ", 127));
 	execve(cmd_path, cmd_splited, info->envp);
 	perror("ERROR : pipex_child_process() ");
 	exit(EXIT_FAILURE);
 }
 
-int		set_fd_dup(t_info_pipex *info, int cnt)
+int	set_fd_dup(t_info_pipex *info, int cnt)
 {
 	int	to_stdin;
 	int	to_stdout;
@@ -98,7 +93,8 @@ int		set_fd_dup(t_info_pipex *info, int cnt)
 	else if (cnt == info->argc - 4)
 	{
 		to_stdin = info->fd.pipe[0];
-		to_stdout = open(info->argv[info->argc - 1], O_RDWR | O_CREAT | O_TRUNC, 0666); //
+		to_stdout = open(info->argv[info->argc - 1], \
+					O_RDWR | O_CREAT | O_TRUNC, 0666);
 		rtn_close = close(info->fd.pipe[1]);
 	}
 	else

@@ -6,7 +6,7 @@
 /*   By: jiwolee <jiwolee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/04 17:25:35 by jiwolee           #+#    #+#             */
-/*   Updated: 2022/07/04 19:13:52 by jiwolee          ###   ########seoul.kr  */
+/*   Updated: 2022/07/04 19:36:19 by jiwolee          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,34 +15,18 @@
 char	*which_cmd(char *cmd, char *envp[], t_info_which *which)
 {
 	pid_t	pid;
-	int		status;
-	char	*cmd_path;
 
 	if (pipe(which->pipe_fd) == -1)
 		return (NULL);
 	if (cmd == NULL)
 		return (NULL);
 	which->which_cmd[1] = cmd;
-	cmd_path = NULL;
 	pid = fork();
 	if (pid == -1)
 		return (NULL);
-	else if (pid == 0) // 자식 프로세스일 경우에
+	else if (pid == 0)
 		which_cmd_child(which, envp);
-	else
-	{
-		close(which->pipe_fd[1]);
-		waitpid(pid, &status, 0);
-		if (WEXITSTATUS(status) == 0)
-		{
-			cmd_path = get_next_line(which->pipe_fd[0]);
-			remove_linefeed(&cmd_path); // gnl 에 합치기 
-			close(which->pipe_fd[0]);
-			return (cmd_path);
-		}
-	}
-	close(which->pipe_fd[0]);
-	return (NULL);
+	return (which_cmd_parent(pid, which));
 }
 
 void	which_cmd_child(t_info_which *which, char *envp[])
@@ -50,14 +34,27 @@ void	which_cmd_child(t_info_which *which, char *envp[])
 	close(which->pipe_fd[0]);
 	dup2(which->pipe_fd[1], 1);
 	execve("/usr/bin/which", which->which_cmd, envp);
-	exit(EXIT_FAILURE); // 여기서 뻑나는 건가?
+	exit(EXIT_FAILURE);
 }
 
-int	which_cmd_parent()
+char	*which_cmd_parent(int pid, t_info_which *which)
 {
-	return (1);
-}
+	char	*cmd_path;
+	int		status;
 
+	cmd_path = NULL;
+	close(which->pipe_fd[1]);
+	waitpid(pid, &status, 0);
+	if (WEXITSTATUS(status) == 0)
+	{
+		cmd_path = get_next_line(which->pipe_fd[0]);
+		remove_linefeed(&cmd_path);
+		close(which->pipe_fd[0]);
+		return (cmd_path);
+	}
+	close(which->pipe_fd[0]);
+	return (NULL);
+}
 
 t_info_which	*set_info_which(t_info_which *info)
 {
@@ -72,6 +69,6 @@ t_info_which	*set_info_which(t_info_which *info)
 void	clear_info_which(t_info_which *info)
 {
 	if (!info)
-		return;
+		return ;
 	free(info->which_cmd[0]);
 }

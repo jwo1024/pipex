@@ -46,13 +46,14 @@ int				set_fd_dup(t_info_pipex *info, int cnt);
 char			*which_cmd(char *cmd, char *envp[], t_info_which *which); // pipex main
 t_info_which	*set_info_which(t_info_which *info);
 void			clear_info_which(t_info_which *info);
-void			remove_linefeed(char **str);
 void			which_cmd_child(t_info_which *which, char *envp[]);
+char			*which_cmd_parent(int pid, t_info_which *which);
 
 /*utils */
 int				is_valid_files(char *file1, char *file2);
 int				error(char	*message, int exit_num);
 void			set_info_pipex(t_info_pipex *info , int argc, char *argv[], char *envp[]); // utils
+void			remove_linefeed(char **str);
 
 
 #endif
