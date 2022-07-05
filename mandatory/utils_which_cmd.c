@@ -6,11 +6,14 @@
 /*   By: jiwolee <jiwolee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/04 17:25:35 by jiwolee           #+#    #+#             */
-/*   Updated: 2022/07/04 21:51:20 by jiwolee          ###   ########seoul.kr  */
+/*   Updated: 2022/07/06 01:30:53 by jiwolee          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include	"pipex.h"
+#include	<unistd.h>
+#include	<stdlib.h>
+#include	<sys/wait.h>
 
 char	*which_cmd(char *cmd, char *envp[], t_info_which *which)
 {
@@ -37,7 +40,7 @@ void	which_cmd_child(t_info_which *which, char *envp[])
 	exit(EXIT_FAILURE);
 }
 
-char	*which_cmd_parent(int pid, t_info_which *which)
+char	*which_cmd_parent(pid_t pid, t_info_which *which)
 {
 	char	*cmd_path;
 	int		status;

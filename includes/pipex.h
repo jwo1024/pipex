@@ -6,7 +6,7 @@
 /*   By: jiwolee <jiwolee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/04 19:45:58 by jiwolee           #+#    #+#             */
-/*   Updated: 2022/07/04 21:45:47 by jiwolee          ###   ########seoul.kr  */
+/*   Updated: 2022/07/06 01:30:34 by jiwolee          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,6 @@
 
 # include	"./libft_pipex.h"
 # include	"./get_next_line.h"
-# include	<stdio.h> // perror
-# include	<unistd.h> // access dup dup2 execve fork unlink
-# include	<stdlib.h> // exit pipe
-# include	<fcntl.h>
-# include	<string.h> //strerror
-// # include	<sys/wait.h>
 
 typedef struct s_info_fd
 {
@@ -40,7 +34,7 @@ typedef struct s_info_pipex
 	int				argc;
 	char			**argv;
 	char			**envp;
-	int				pid[2];
+	pid_t			pid[2]; // pid_t 로 변경해야 한다.
 	int				status[2];
 	t_info_fd		fd;
 	t_info_which	which;
@@ -54,7 +48,7 @@ char			*which_cmd(char *cmd, char *envp[], t_info_which *which);
 t_info_which	*set_info_which(t_info_which *info);
 void			clear_info_which(t_info_which *info);
 void			which_cmd_child(t_info_which *which, char *envp[]);
-char			*which_cmd_parent(int pid, t_info_which *which);
+char			*which_cmd_parent(pid_t pid, t_info_which *which);
 int				is_valid_files(char *file1, char *file2);
 int				error(char	*message, int exit_num);
 void			set_info_pipex(t_info_pipex *info, \

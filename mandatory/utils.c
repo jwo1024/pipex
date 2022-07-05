@@ -6,11 +6,13 @@
 /*   By: jiwolee <jiwolee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/04 17:25:26 by jiwolee           #+#    #+#             */
-/*   Updated: 2022/07/04 21:52:40 by jiwolee          ###   ########seoul.kr  */
+/*   Updated: 2022/07/06 01:41:24 by jiwolee          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include	"pipex.h"
+#include	<stdio.h>
+#include	<unistd.h>
 
 int	is_valid_files(char *file1, char *file2)
 {

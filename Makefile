@@ -6,7 +6,7 @@
 #    By: jiwolee <jiwolee@student.42seoul.kr>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/22 15:27:03 by jiwolee           #+#    #+#              #
-#    Updated: 2022/07/02 23:40:51 by jiwolee          ###   ########seoul.kr   #
+#    Updated: 2022/07/06 02:15:38 by jiwolee          ###   ########seoul.kr   #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,7 +34,6 @@ SRCS_3	= libft_for_pipex/ft_split.c\
 SRCS	= $(SRCS_1) $(SRCS_2) $(SRCS_3)
 
 OBJS	= $(SRCS:.c=.o)
-
 
 %.o : %.c
 	$(CC) $(CFLAG) $(INCLUDES) -c -o $@ $^

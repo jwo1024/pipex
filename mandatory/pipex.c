@@ -6,16 +6,16 @@
 /*   By: jiwolee <jiwolee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/04 17:25:09 by jiwolee           #+#    #+#             */
-/*   Updated: 2022/07/04 21:46:07 by jiwolee          ###   ########seoul.kr  */
+/*   Updated: 2022/07/06 01:56:57 by jiwolee          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include	"pipex.h"
-
-#include	<stdio.h>
-#include	<unistd.h> // execve
-#include	<stdlib.h>
 #include	<fcntl.h>
+#include	<stdlib.h>
+#include	<sys/wait.h>
+#include	<unistd.h>
+#include	<stdio.h>
 
 int	main(int argc, char *argv[], char *envp[])
 {
@@ -94,7 +94,7 @@ int	set_fd_dup(t_info_pipex *info, int cnt)
 	{
 		to_stdin = info->fd.pipe[0];
 		to_stdout = open(info->argv[info->argc - 1], \
-					O_RDWR | O_CREAT | O_TRUNC, 0666);
+					O_WRONLY | O_CREAT | O_TRUNC, 0666);
 		rtn_close = close(info->fd.pipe[1]);
 	}
 	else

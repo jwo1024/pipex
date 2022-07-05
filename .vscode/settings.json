@@ -1,0 +1,8 @@
+{
+	"files.associations": {
+		"wait.h": "c",
+		"unistd.h": "c",
+		"stdlib.h": "c",
+		"libft_pipex.h": "c"
+	}
+}
